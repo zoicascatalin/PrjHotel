@@ -19,10 +19,7 @@ namespace Facs
         {
             bool existingUser = false;
 
-
-
             SqlConnection conn = new SqlConnection(cnnStr);
-
             try
             {
                 conn.Open();
@@ -34,7 +31,6 @@ namespace Facs
                 {
                     existingUser = true;
                 }
-                
             }
             catch
             {
