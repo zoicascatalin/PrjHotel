@@ -34,7 +34,6 @@
     <script type="text/javascript">
         $('#checkRememberUsername').prop('checked', true);
         $('#checkStayLogged').prop('checked', true);
-        console.log($('#checkStayLogged'));
         var checkRU = $("#checkRememberUsername:checked").length;
         if (checkRU) {
             $("#checkRememberUsername").addClass("checked");

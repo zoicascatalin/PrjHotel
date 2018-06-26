@@ -16,6 +16,7 @@ namespace HotelHost
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            lblWrongData.Style.Add("color", "red");
             btnConfirm.Text = "Conferma";
             lblUsername.Text = "Username";
             lblPassword.Text = "Password";
@@ -26,6 +27,17 @@ namespace HotelHost
         protected void btnConfirm_Click(object sender, EventArgs e)
         {
             bool existingUser = false;
+            if(txtUsername.Text != null)
+            {
+                if(txtPassword.Text != null)
+                {
+                    existingUser = facUsers.UserExists(txtUsername.Text, txtPassword.Text);
+                }
+                else
+                {
+                    lblWrongData.Text = "Dati Errati o Utente non Esistente!";
+                }
+            }
             if (txtUsername.Text != null && txtPassword.Text != null)
             {
                 existingUser = facUsers.UserExists(txtUsername.Text, txtPassword.Text);
@@ -36,7 +48,6 @@ namespace HotelHost
             }
             else
             {
-                lblWrongData.Style.Add("color", "red");
                 lblWrongData.Text = "Dati Errati o Utente non Esistente!";
             }
         }

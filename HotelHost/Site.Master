@@ -40,7 +40,7 @@
 
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <div class="container body-content">
-                <a class="navbar-brand" href="#" style="float:left;">Hotel</a>
+                <a class="navbar-brand" href="#" style="float:left;">Hotel TRIADE</a>
                 <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
