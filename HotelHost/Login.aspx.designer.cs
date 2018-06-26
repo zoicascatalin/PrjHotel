@@ -7,7 +7,7 @@
 // </generato automaticamente>
 //------------------------------------------------------------------------------
 
-namespace HotelHost {
+namespace HotelBase {
     
     
     public partial class Login {
