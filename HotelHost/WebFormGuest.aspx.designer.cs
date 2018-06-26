@@ -7,18 +7,9 @@
 // </generato automaticamente>
 //------------------------------------------------------------------------------
 
-namespace HotelHost {
+namespace HotelBase {
     
     
     public partial class WebFormGuest {
-        
-        /// <summary>
-        /// Controllo form1.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
     }
 }
