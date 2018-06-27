@@ -42,5 +42,11 @@ namespace Facs
             }
             return existingUser;
         }
+
+        public static int GetRole()
+        {
+
+            return -1;
+        }
     }
 }

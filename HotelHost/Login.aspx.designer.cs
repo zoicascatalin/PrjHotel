@@ -58,22 +58,13 @@ namespace HotelBase {
         protected global::System.Web.UI.WebControls.TextBox txtPassword;
         
         /// <summary>
-        /// Controllo checkRememberUsername.
+        /// Controllo chkRemember.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox checkRememberUsername;
-        
-        /// <summary>
-        /// Controllo checkStayLogged.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox checkStayLogged;
+        protected global::System.Web.UI.WebControls.CheckBox chkRemember;
         
         /// <summary>
         /// Controllo btnConfirm.
