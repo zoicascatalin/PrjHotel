@@ -118,5 +118,28 @@ namespace Facs
             }
 
         }
+
+        public static void SetTemperatura(UtenteGuest utente)
+        {
+            SqlConnection conn = new SqlConnection(cnnStr);
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand("UPDATE Rooms SET Temeperatura = @temp WHERE ID = @roomID", conn);
+                cmd.Parameters.AddWithValue("@temp", utente.Temperatura);
+                cmd.Parameters.AddWithValue("@roomID", utente.Stanza);
+
+                conn.Open();
+
+                cmd.ExecuteNonQuery();
+
+                conn.Close();
+            }
+            catch
+            {
+
+                return;
+            }
+        }
     }
 }
