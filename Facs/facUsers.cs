@@ -46,7 +46,6 @@ namespace Facs
             }
             return usr;
         }
-    }
 
         public static UtenteGuest GetCamera(string Username, string Password)
         {
