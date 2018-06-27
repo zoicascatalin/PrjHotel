@@ -16,9 +16,9 @@ namespace Facs
     {
         public static string cnnStr = "Server=tcp:prjwork.database.windows.net,1433;Initial Catalog=ProjectWorkHotel;Persist Security Info=False;User ID=yourfather;Password=PRJwork1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
-        public static bool UserExists(string username, string password)
+        public static Users UserExists(string username, string password)
         {
-            bool existingUser = false;
+            Users usr = new Users();
 
             SqlConnection conn = new SqlConnection(cnnStr);
             try
@@ -28,21 +28,25 @@ namespace Facs
                 cmd.Parameters.AddWithValue("@Username", username);
                 cmd.Parameters.AddWithValue("@Password", password);
                 var result = cmd.ExecuteReader();
-                if (result.HasRows)
+                while (result.Read())
                 {
-                    existingUser = true;
+                    usr.ID = Guid.Parse(result[0].ToString());
+                    usr.Role = int.Parse(result[6].ToString());
+                    usr.CheckedOut = bool.Parse(result[5].ToString());
                 }
+
             }
             catch
             {
-                return existingUser;
+                return null;
             }
             finally
             {
                 conn.Close();
             }
-            return existingUser;
+            return usr;
         }
+    }
 
         public static UtenteGuest GetCamera(string Username, string Password)
         {
