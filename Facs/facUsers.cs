@@ -16,9 +16,9 @@ namespace Facs
     {
         public static string cnnStr = "Server=tcp:prjwork.database.windows.net,1433;Initial Catalog=ProjectWorkHotel;Persist Security Info=False;User ID=yourfather;Password=PRJwork1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
-        public static Users UserExists(string username, string password)
+        public static bool UserExists(string username, string password)
         {
-            Users usr = new Users();
+            bool existingUser = false;
 
             SqlConnection conn = new SqlConnection(cnnStr);
             try
@@ -28,23 +28,20 @@ namespace Facs
                 cmd.Parameters.AddWithValue("@Username", username);
                 cmd.Parameters.AddWithValue("@Password", password);
                 var result = cmd.ExecuteReader();
-                while(result.Read())
+                if (result.HasRows)
                 {
-                    usr.ID = Guid.Parse(result[0].ToString());
-                    usr.Role = int.Parse(result[6].ToString());
-                    usr.CheckedOut = bool.Parse(result[5].ToString());
+                    existingUser = true;
                 }
-                
             }
             catch
             {
-                return null;
+                return existingUser;
             }
             finally
             {
                 conn.Close();
             }
-            return usr;
+            return existingUser;
         }
 
         public static UtenteGuest GetCamera(string Username, string Password)
@@ -122,36 +119,27 @@ namespace Facs
 
         }
 
-        public static Users GetRole(Guid UserID)
+        public static void SetTemperatura(UtenteGuest utente)
         {
-            Users usr = new Users();
-
-
             SqlConnection conn = new SqlConnection(cnnStr);
 
             try
             {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("", conn);
+                SqlCommand cmd = new SqlCommand("UPDATE Rooms SET Temeperatura = @temp WHERE ID = @roomID", conn);
+                cmd.Parameters.AddWithValue("@temp", utente.Temperatura);
+                cmd.Parameters.AddWithValue("@roomID", utente.Stanza);
 
+                conn.Open();
 
                 cmd.ExecuteNonQuery();
 
+                conn.Close();
             }
             catch
             {
 
-                return null;
+                return;
             }
-            finally
-            {
-                conn.Close();
-
-            }
-
-
-
-            return usr;
         }
     }
 }

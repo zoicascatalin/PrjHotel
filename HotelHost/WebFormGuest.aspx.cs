@@ -14,19 +14,36 @@ namespace HotelBase
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            x = facUsers.GetCamera("gusso", "gusso");
-            pianoNumber.InnerText = x.Piano.ToString();
-            cameraNumber.InnerText = x.Stanza.ToString();
-            tempControl.Value = x.Temperatura.ToString();
-            if (x.StatoPorta)
+            if (!IsPostBack)
             {
-                btnOpen.Enabled = true;
-                btnClose.Enabled = false;
-            }
-            else
-            {
-                btnOpen.Enabled = false;
-                btnClose.Enabled = true;
+                x = facUsers.GetCamera("gusso", "gusso");
+                pianoNumber.InnerText = x.Piano.ToString();
+                cameraNumber.InnerText = x.Stanza.ToString();
+                
+                if (x.Temperatura > 30)
+                {
+                    x.Temperatura = 30;
+                    facUsers.SetTemperatura(x);
+                }
+                else if (x.Temperatura < 10)
+                {
+                    x.Temperatura = 10;
+                    facUsers.SetTemperatura(x);
+                }
+
+                tempControl.Value = x.Temperatura.ToString();
+
+                if (x.StatoPorta)
+                {
+                    btnOpen.Enabled = true;
+                    btnClose.Enabled = false;
+                }
+                else
+                {
+                    btnOpen.Enabled = false;
+                    btnClose.Enabled = true;
+                }
+
             }
         }
 
@@ -36,15 +53,37 @@ namespace HotelBase
             btnOpen.Enabled = false;
             btnClose.Enabled = true;
             facUsers.SetPortaCamera(x);
-            
+
         }
 
         protected void btnClose_Click(object sender, EventArgs e)
         {
             x.StatoPorta = false;
-            btnOpen.Enabled= true;
+            btnOpen.Enabled = true;
             btnClose.Enabled = false;
             facUsers.SetPortaCamera(x);
+        }
+
+        protected void btnTemperatura_Click(object sender, EventArgs e)
+        {
+            
+            x.Temperatura = decimal.Parse(tempControl.Value);
+
+            if (x.Temperatura > 30)
+            {
+                x.Temperatura = 30;
+                
+            }
+            else if (x.Temperatura < 10)
+            {
+                x.Temperatura = 10;
+                
+            }
+
+            facUsers.SetTemperatura(x);
+            tempControl.Value = x.Temperatura.ToString();
+
+
         }
     }
 }

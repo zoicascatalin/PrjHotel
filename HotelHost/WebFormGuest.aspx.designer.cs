@@ -37,7 +37,16 @@ namespace HotelBase {
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText tempControl;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl tempControl;
+        
+        /// <summary>
+        /// Controllo btnTemperatura.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnTemperatura;
         
         /// <summary>
         /// Controllo btnOpen.
