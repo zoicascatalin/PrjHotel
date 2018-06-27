@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="facUsers.cs" />
+    <Compile Include="Modelli\Users.cs" />
     <Compile Include="Modelli\UtenteGuest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

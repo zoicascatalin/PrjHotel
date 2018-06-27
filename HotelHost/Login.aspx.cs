@@ -1,4 +1,5 @@
 ﻿using Facs;
+using Facs.Modelli;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace HotelBase
 {
     public partial class Login : System.Web.UI.Page
     {
+        Users usr = new Users();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -21,25 +23,75 @@ namespace HotelBase
             lblUsername.Text = "Username";
             lblPassword.Text = "Password";
             chkRemember.Text = "Resta Collegato";
+            if (Cache != null && Cache["username"] != null && Cache["password"] != null)
+            {
+                usr = facUsers.UserExists(Cache["username"].ToString(), Cache["password"].ToString());
+                if (usr != null)
+                {
+                    if (usr.Role == 1)
+                    {
+                        //redirect to Host Page
+                        Cache["username"] = txtUsername.Text;
+                        Cache["password"] = txtPassword.Text;
+                    }
+                    else
+                    {
+                        if (!usr.CheckedOut)
+                        {
+                            Cache["username"] = txtUsername.Text;
+                            Cache["password"] = txtPassword.Text;
+                            Server.TransferRequest("WebFormGuest.aspx", true);
+                        }
+                        else
+                        {
+                            lblWrongData.Text = "Utente scaduto";
+                        }
+                    }
+                }
+                else
+                {
+                    lblWrongData.Text = "Dati Errati o Utente non Esistente!";
+                }
+            }
         }
 
         protected void btnConfirm_Click(object sender, EventArgs e)
         {
-            bool existingUser = false;
             if (txtUsername.Text != null && txtPassword.Text != null)
             {
-
-                existingUser = facUsers.UserExists(txtUsername.Text, txtPassword.Text);
+                usr = facUsers.UserExists(txtUsername.Text, txtPassword.Text);
             }
             else
             {
                 lblWrongData.Text = "Dati Errati o Utente non Esistente!";
             }
 
-            if (existingUser)
+            if (usr.ID != Guid.Empty)
             {
-                System.Diagnostics.Process.Start("https://www.booking.com/hotel/ae/aloft-abu-dhabi.en-gb.html?label=gen173nr-1DCAEoggJCAlhYSDNYBGhxiAEBmAEuwgEKd2luZG93cyAxMMgBDNgBA-gBAZICAXmoAgM;sid=9425a8f638bf05e336438ce36440eefc;dest_id=-782066;dest_type=city;dist=0;hapos=1;hpos=1;room1=A%2CA;sb_price_type=total;srepoch=1529492959;srfid=21e105c4f65a8c4ce023628696fac5828962b0f8X1;srpvid=60804e6f4b430348;type=total;ucfs=1&#hotelTmpl");
-
+                if (usr.Role == 1)
+                {
+                    //redirect to Host Page
+                    Cache["username"] = txtUsername.Text;
+                    Cache["password"] = txtPassword.Text;
+                    Server.TransferRequest("WebFormHost.aspx", true);
+                }
+                else if(usr.Role == 2)
+                {
+                    if (!usr.CheckedOut)
+                    {
+                        Cache["username"] = txtUsername.Text;
+                        Cache["password"] = txtPassword.Text;
+                        Server.TransferRequest("WebFormGuest.aspx", true);
+                    }
+                    else
+                    {
+                        lblWrongData.Text = "Utente scaduto";
+                    }
+                }
+                else
+                {
+                    lblWrongData.Text = "PROBLEM SOLVING";
+                }
             }
             else
             {

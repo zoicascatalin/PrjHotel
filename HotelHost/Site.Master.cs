@@ -13,5 +13,13 @@ namespace HotelBase
         {
 
         }
+
+        protected void Logout_ServerClick(object sender, EventArgs e)
+        {
+            Login.Visible = true;
+            Logout.Visible = false;
+            Cache.Remove("username");
+            Cache.Remove("password");
+        }
     }
 }

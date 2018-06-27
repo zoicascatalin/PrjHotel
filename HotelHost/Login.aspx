@@ -22,12 +22,13 @@
             width: 16px;
             display: inline-block;
             padding: 0 0 0 0px;
-            margin-right:5px;
+            margin-right: 5px;
         }
-        .checkB label{ 
-            position: relative; 
-            top: -2px; 
-        } 
+
+            .checkB label {
+                position: relative;
+                top: -2px;
+            }
     </style>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,6 +52,7 @@
             </div>
             <asp:Label runat="server" ID="lblWrongData"></asp:Label>
         </div>
+
     </asp:Panel>
 
 </asp:Content>
