@@ -13,7 +13,6 @@ namespace Facs.Modelli
         public string Password { get; set; }
         public bool CheckedOut { get; set; }
         public int Role { get; set; }
-        public DateTime LastLogin { get; set; }
         public int ID_Camera { get; set; }
     }
 }

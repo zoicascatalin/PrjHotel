@@ -23,29 +23,19 @@ namespace HotelBase
             lblUsername.Text = "Username";
             lblPassword.Text = "Password";
             chkRemember.Text = "Resta Collegato";
-            if (Cache != null && Cache["username"] != null && Cache["password"] != null)
+            if (Cache != null && Cache["UserId"] != null)
             {
-                usr = facUsers.UserExists(Cache["username"].ToString(), Cache["password"].ToString());
-                if (usr != null)
+                usr = facUsers.UserExists(Guid.Parse(Cache["UserId"].ToString()));
+                if (usr.ID != Guid.Empty)
                 {
+                    facUsers.Login(usr.ID);
                     if (usr.Role == 1)
                     {
-                        //redirect to Host Page
-                        Cache["username"] = txtUsername.Text;
-                        Cache["password"] = txtPassword.Text;
+                        Response.Redirect("WebFormHost.aspx");
                     }
-                    else
+                    else if (usr.Role == 2 && !usr.CheckedOut)
                     {
-                        if (!usr.CheckedOut)
-                        {
-                            Cache["username"] = txtUsername.Text;
-                            Cache["password"] = txtPassword.Text;
-                            Server.TransferRequest("WebFormGuest.aspx", true);
-                        }
-                        else
-                        {
-                            lblWrongData.Text = "Utente scaduto";
-                        }
+                        Response.Redirect("WebFormGuest.aspx");
                     }
                 }
                 else
@@ -60,43 +50,29 @@ namespace HotelBase
             if (txtUsername.Text != null && txtPassword.Text != null)
             {
                 usr = facUsers.UserExists(txtUsername.Text, txtPassword.Text);
+                if (usr.ID != Guid.Empty)
+                {
+                    facUsers.Login(usr.ID);
+                    Cache["UserId"] = usr.ID;
+                    if(usr.Role == 1)
+                    {
+                        Response.Redirect("WebFormHost.aspx");
+                    }else if(usr.Role == 2 && !usr.CheckedOut)
+                    {
+                        Response.Redirect("WebFormGuest.aspx");
+                    }
+                }
+                else
+                {
+                    lblWrongData.Text = "Dati Errati o Utente non Esistente!";
+                }
             }
             else
             {
                 lblWrongData.Text = "Dati Errati o Utente non Esistente!";
             }
 
-            if (usr.ID != Guid.Empty)
-            {
-                if (usr.Role == 1)
-                {
-                    //redirect to Host Page
-                    Cache["username"] = txtUsername.Text;
-                    Cache["password"] = txtPassword.Text;
-                    Server.TransferRequest("WebFormHost.aspx", true);
-                }
-                else if(usr.Role == 2)
-                {
-                    if (!usr.CheckedOut)
-                    {
-                        Cache["username"] = txtUsername.Text;
-                        Cache["password"] = txtPassword.Text;
-                        Server.TransferRequest("WebFormGuest.aspx", true);
-                    }
-                    else
-                    {
-                        lblWrongData.Text = "Utente scaduto";
-                    }
-                }
-                else
-                {
-                    lblWrongData.Text = "PROBLEM SOLVING";
-                }
-            }
-            else
-            {
-                lblWrongData.Text = "Dati Errati o Utente non Esistente!";
-            }
+            
         }
 
         protected void chkRemember_CheckedChanged(object sender, EventArgs e)

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Data.SqlClient;
 using Facs.Modelli;
+using System.Data;
 
 namespace Facs
 {
@@ -16,6 +17,39 @@ namespace Facs
     {
         public static string cnnStr = "Server=tcp:prjwork.database.windows.net,1433;Initial Catalog=ProjectWorkHotel;Persist Security Info=False;User ID=yourfather;Password=PRJwork1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
+        public static Users UserExists(Guid UserId)
+        {
+            Users usr = new Users();
+
+            SqlConnection conn = new SqlConnection(cnnStr);
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Users WHERE ID = @id", conn);
+                cmd.Parameters.AddWithValue("@id", UserId);
+                var result = cmd.ExecuteReader();
+                while (result.Read())
+                {
+                    usr.ID = Guid.Parse(result[0].ToString());
+                    usr.Username = result[1].ToString();
+                    usr.Password = result[2].ToString();
+                    usr.CheckedOut = bool.Parse(result[5].ToString());
+                    usr.Role = int.Parse(result[6].ToString());
+                    if (usr.Username != "admin")
+                        usr.ID_Camera = int.Parse(result[8].ToString());
+                }
+
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return usr;
+        }
         public static Users UserExists(string username, string password)
         {
             Users usr = new Users();
@@ -24,15 +58,19 @@ namespace Facs
             try
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Users WHERE username = @Username AND password = @Password", conn);
-                cmd.Parameters.AddWithValue("@Username", username);
-                cmd.Parameters.AddWithValue("@Password", password);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Users WHERE username = @username AND password = @password", conn);
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@password", password);
                 var result = cmd.ExecuteReader();
                 while (result.Read())
                 {
                     usr.ID = Guid.Parse(result[0].ToString());
-                    usr.Role = int.Parse(result[6].ToString());
+                    usr.Username = result[1].ToString();
+                    usr.Password = result[2].ToString();
                     usr.CheckedOut = bool.Parse(result[5].ToString());
+                    usr.Role = int.Parse(result[6].ToString());
+                    if (usr.Username != "admin")
+                        usr.ID_Camera = int.Parse(result[8].ToString());
                 }
 
             }
@@ -47,7 +85,7 @@ namespace Facs
             return usr;
         }
 
-        public static UtenteGuest GetCamera(string Username, string Password)
+        public static UtenteGuest GetCamera(Guid userId)
         {
             UtenteGuest res = new UtenteGuest();
             object floorId = null;
@@ -55,10 +93,9 @@ namespace Facs
             try
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("SELECT ID_Camera From Users WHERE username = @username AND password = @password"
+                SqlCommand cmd = new SqlCommand("SELECT ID_Camera From Users WHERE ID = @id"
                                                 , conn);
-                cmd.Parameters.AddWithValue("@username", Username);
-                cmd.Parameters.AddWithValue("@password", Password);
+                cmd.Parameters.AddWithValue("@id", userId);
                 SqlDataReader result = cmd.ExecuteReader();
                 while (result.Read())
                 {
@@ -114,7 +151,7 @@ namespace Facs
 
                 conn.Close();
             }
-            catch 
+            catch
             {
 
                 return;
@@ -142,6 +179,242 @@ namespace Facs
             {
 
                 return;
+            }
+        }
+        public static void SetTemperatura(int stanza,decimal temp)
+        {
+            SqlConnection conn = new SqlConnection(cnnStr);
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand("UPDATE Rooms SET Temperatura = @temp WHERE ID = @roomID", conn);
+                cmd.Parameters.AddWithValue("@temp", temp);
+                cmd.Parameters.AddWithValue("@roomID", stanza);
+
+                conn.Open();
+
+                cmd.ExecuteNonQuery();
+
+                conn.Close();
+            }
+            catch
+            {
+
+                return;
+            }
+        }
+        public static Guid GetUserID(string username, string password)
+        {
+            Guid id = new Guid();
+
+            SqlConnection conn = new SqlConnection(cnnStr);
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("SELECT ID FROM Users WHERE username = @username AND password = @password", conn);
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@password", password);
+                var result = cmd.ExecuteReader();
+                while (result.Read())
+                {
+                    id = Guid.Parse(result[0].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return Guid.Empty;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return id;
+        }
+
+        public static bool IsLogged(Guid UserId)
+        {
+            bool log = false;
+            SqlConnection conn = new SqlConnection(cnnStr);
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("SELECT * FROM AccessLog WHERE ID_User = @id ", conn);
+                cmd.Parameters.AddWithValue("@id", UserId);
+                var result = cmd.ExecuteReader();
+                if (result != null)
+                {
+                    log = true;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return log;
+
+
+        }
+
+        public static void Logout(Guid userID)
+        {
+            SqlConnection conn = new SqlConnection(cnnStr);
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("UPDATE AccessLog SET Logged = 0 WHERE ID_User = @id", conn);
+                cmd.Parameters.AddWithValue("@id", userID);
+                cmd.ExecuteNonQuery();
+                SqlCommand cmd2 = new SqlCommand("UPDATE Users SET CheckedOut = 1 WHERE ID = @id", conn);
+                cmd2.Parameters.AddWithValue("@id", userID);
+                cmd2.ExecuteNonQuery();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        public static void Login(Guid userId)
+        {
+            SqlConnection conn = new SqlConnection(cnnStr);
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("UPDATE AccessLog SET Logged = 1,Datetime = @datetime WHERE ID_User = @id", conn);
+                cmd.Parameters.AddWithValue("@id", userId);
+                cmd.Parameters.AddWithValue("@datetime", DateTime.Now);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+        }
+
+        public static List<string> getFloors()
+        {
+            List<string> list = new List<string>();
+
+            SqlConnection conn = new SqlConnection(cnnStr);
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("SELECT Piano FROM Floors", conn);
+                var result = cmd.ExecuteReader();
+                while (result.Read())
+                {
+                    list.Add("Piano " + result[0].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return list;
+        }
+
+        public static List<UtenteGuest> getRooms(string x)
+        {
+            List<UtenteGuest> list = new List<UtenteGuest>();
+            UtenteGuest ut = new UtenteGuest();
+            SqlConnection conn = new SqlConnection(cnnStr);
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(@"SELECT Rooms.Temperatura,Rooms.Porta,Rooms.ID FROM Floors
+                                                    JOIN Rooms ON Rooms.ID_Piano = Floors.ID AND Piano = @floor", conn);
+                cmd.Parameters.AddWithValue("@floor", x);
+                var result = cmd.ExecuteReader();
+                while (result.Read())
+                {
+                    list.Add(new UtenteGuest()
+                    {
+                        Piano = int.Parse(x),
+                        Stanza = int.Parse(result[2].ToString()),
+                        Temperatura = decimal.Parse(result[0].ToString()),
+                        StatoPorta = bool.Parse(result[1].ToString())
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+
+            return list;
+        }
+
+        public static DataSet DSgetRooms(string x)
+        {
+            DataSet ds = new DataSet();
+            SqlConnection conn = new SqlConnection(cnnStr);
+            try
+            {
+                conn.Open();
+                string query = string.Format(@"SELECT Rooms.Temperatura,Rooms.Porta,Rooms.ID FROM Floors
+                                                    JOIN Rooms ON Rooms.ID_Piano = Floors.ID AND Piano = {0}", x);
+                SqlDataAdapter da = new SqlDataAdapter(query, conn);
+                da.Fill(ds);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return ds;
+        }
+        public static void setPortaCamera(int stanza, bool porta)
+        {
+
+            SqlConnection conn = new SqlConnection(cnnStr);
+
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("UPDATE Rooms SET Porta = @stato WHERE ID = @roomID", conn);
+                cmd.Parameters.AddWithValue("@stato", porta);
+                cmd.Parameters.AddWithValue("@roomID", stanza);
+
+
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                conn.Close();
             }
         }
     }

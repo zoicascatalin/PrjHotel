@@ -16,10 +16,10 @@ namespace HotelBase
         {
             if (!IsPostBack)
             {
-                x = facUsers.GetCamera("gusso", "gusso");
+                x = facUsers.GetCamera(Guid.Parse(Cache["UserId"].ToString()));
                 pianoNumber.InnerText = x.Piano.ToString();
                 cameraNumber.InnerText = x.Stanza.ToString();
-                
+
                 if (x.Temperatura > 30)
                 {
                     x.Temperatura = 30;
@@ -66,18 +66,18 @@ namespace HotelBase
 
         protected void btnTemperatura_Click(object sender, EventArgs e)
         {
-            
+
             x.Temperatura = decimal.Parse(tempControl.Value);
 
             if (x.Temperatura > 30)
             {
                 x.Temperatura = 30;
-                
+
             }
             else if (x.Temperatura < 10)
             {
                 x.Temperatura = 10;
-                
+
             }
 
             facUsers.SetTemperatura(x);

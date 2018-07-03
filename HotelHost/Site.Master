@@ -40,7 +40,7 @@
 
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <div class="container body-content">
-                <a class="navbar-brand" href="#" style="float:left;">Hotel TRIADE</a>
+                <a class="navbar-brand" href="#" style="float: left;">Hotel TRIADE</a>
                 <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -48,13 +48,12 @@
                     <ul class="nav navbar-nav mr-auto navbar-right">
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="nav-item active"><a class="nav-link" href="/Home.aspx" runat="server">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/About.aspx">About</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/Contact.aspx">Contact</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/WebFormGuest.aspx">my</a></li>
-                        <li class="nav-item"><a runat="server" id="Login" class="nav-link" href="/Login.aspx">Login</a></li>
-                        <li class="nav-item"><a runat="server" id="Logout" class="nav-link" href="/Home.aspx" onserverclick="Logout_ServerClick">Logout</a></li>
-
+                        <li class="nav-item"><asp:LinkButton ID="Home" class="nav-link" OnClick="CheckUser_Click" href="/Home.aspx" runat="server" CausesValidation="False">Home</asp:LinkButton></li>
+                        <li class="nav-item"><asp:LinkButton ID="About" class="nav-link" OnClick="CheckUser_Click" href="/About.aspx" runat="server" CausesValidation="False">About</asp:LinkButton></li>
+                        <li class="nav-item"><asp:LinkButton ID="Contact" class="nav-link" OnClick="CheckUser_Click" href="/Contact.aspx" runat="server" CausesValidation="False">Contact</asp:LinkButton></li>
+                        <li class="nav-item"><asp:LinkButton ID="lnkAmministrazione" runat="server" CausesValidation="False" class="nav-link">Amministrazione</asp:LinkButton></li>
+                        <li class="nav-item"><asp:LinkButton ID="lnkLogout" runat="server" CausesValidation="False" OnClick="lnkLogout_Click" class="nav-link">Logout</asp:LinkButton></li>
+                        <li class="nav-item"><asp:LinkButton ID="lnkLogin" runat="server" class="nav-link" PostBackUrl="~/Login.aspx">Login</asp:LinkButton></li>
                     </ul>
                 </div>
             </div>
