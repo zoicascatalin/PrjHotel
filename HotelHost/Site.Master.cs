@@ -12,6 +12,7 @@ namespace HotelBase
 {
     public partial class SiteMaster : MasterPage
     {
+        Users usr = new Users();
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Cache != null && Cache["UserId"] != null)
@@ -21,19 +22,32 @@ namespace HotelBase
                     lnkLogin.Visible = false;
                     lnkLogout.Visible = true;
                     lnkAmministrazione.Visible = true;
+                    usr = facUsers.UserExists(Guid.Parse(Cache["UserId"].ToString()));
+                    if (usr.Role == 1)
+                    {
+                        admin.Visible = true;
+                        guest.Visible = false;
+                    }
+                    else
+                    {
+                        admin.Visible = false;
+                        guest.Visible = true;
+                    }
 
                 }
                 else
                 {
-                    lnkAmministrazione.Visible = false;
+                    admin.Visible = false;
+                    guest.Visible = false;
                     lnkLogout.Visible = false;
                     lnkLogin.Visible = true;
                 }
             }
             else
             {
-                lnkAmministrazione.Visible = false;
                 lnkLogout.Visible = false;
+                admin.Visible = false;
+                guest.Visible = false;
                 lnkLogin.Visible = true;
             }
 
@@ -49,22 +63,5 @@ namespace HotelBase
             Response.Redirect("Home.aspx");
         }
 
-        protected void CheckUser_Click(object sender, EventArgs e)
-        {
-            Users usr = new Users();
-            usr = facUsers.UserExists(Guid.Parse(Cache["UserId"].ToString()));
-            if (usr.Role == 1)
-            {
-                Response.Redirect("WebFormHost.aspx");
-            }
-            else if (usr.Role == 2 && !usr.CheckedOut)
-            {
-                Response.Redirect("WebFormGuest.aspx");
-            }
-            else
-            {
-                lnkLogout_Click(null, EventArgs.Empty);
-            }
-        }
     }
 }

@@ -37,13 +37,13 @@ namespace HotelBase
 
                 if (x.StatoPorta)
                 {
-                    btnOpen.Enabled = true;
-                    btnClose.Enabled = false;
+                    btnOpen.Enabled = false;
+                    btnClose.Enabled = true;
                 }
                 else
                 {
-                    btnOpen.Enabled = false;
-                    btnClose.Enabled = true;
+                    btnOpen.Enabled = true;
+                    btnClose.Enabled = false;
                 }
 
             }
