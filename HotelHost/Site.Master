@@ -11,6 +11,7 @@
 
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/bundles/modernizr") %>
+
     </asp:PlaceHolder>
 
     <webopt:BundleReference runat="server" Path="~/Content/css" />
@@ -24,7 +25,6 @@
                 <%--Framework Scripts--%>
                 <asp:ScriptReference Name="MsAjaxBundle" />
                 <asp:ScriptReference Name="jquery" />
-                <%--<asp:ScriptReference Name="jquery-ui" />--%>
                 <asp:ScriptReference Name="bootstrap" />
                 <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
                 <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
@@ -49,13 +49,31 @@
                     <ul class="nav navbar-nav mr-auto navbar-right">
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="nav-item"><asp:LinkButton ID="Home" class="nav-link" OnClick="CheckUser_Click" href="/Home.aspx" runat="server" CausesValidation="False">Home</asp:LinkButton></li>
-                        <li class="nav-item"><asp:LinkButton ID="About" class="nav-link" OnClick="CheckUser_Click" href="/About.aspx" runat="server" CausesValidation="False">About</asp:LinkButton></li>
-                        <li class="nav-item"><asp:LinkButton ID="asd" runat="server" class="nav-link" PostBackUrl="~/AddGuest.aspx">add</asp:LinkButton></li>
-                        <li class="nav-item"><asp:LinkButton ID="Contact" class="nav-link" OnClick="CheckUser_Click" href="/Contact.aspx" runat="server" CausesValidation="False">Contact</asp:LinkButton></li>
-                        <li class="nav-item"><asp:LinkButton ID="lnkAmministrazione" runat="server" CausesValidation="False" class="nav-link">Amministrazione</asp:LinkButton></li>
-                        <li class="nav-item"><asp:LinkButton ID="lnkLogout" runat="server" CausesValidation="False" OnClick="lnkLogout_Click" class="nav-link">Logout</asp:LinkButton></li>
-                        <li class="nav-item"><asp:LinkButton ID="lnkLogin" runat="server" class="nav-link" PostBackUrl="~/Login.aspx">Login</asp:LinkButton></li>
+                        <li class="nav-item">
+                            <asp:LinkButton ID="Home" class="nav-link" href="/Home.aspx" runat="server" CausesValidation="False">Home</asp:LinkButton></li>
+                        <li class="nav-item">
+                            <asp:LinkButton ID="About" class="nav-link" href="/About.aspx" runat="server" CausesValidation="False">About</asp:LinkButton></li>
+                        <li class="nav-item">
+                            <asp:LinkButton ID="Contact" class="nav-link" href="/Contact.aspx" runat="server" CausesValidation="False">Contact</asp:LinkButton></li>
+                        <li class="nav-item">
+                            <div class="dropdown" runat="server" id="admin">
+                                <button class="btn btn-dark dropdown-toggle nav-link" runat="server" style="margin: 0;" type="button" id="lnkAmministrazione" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Amministrazione
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="lnkAmministrazione">
+                                    <asp:LinkButton ID="lnkCamere" runat="server" class="dropdown-item">Gestione Camere</asp:LinkButton>
+                                    <asp:LinkButton ID="lnkAddGuest" runat="server" class="dropdown-item">Aggiungi Utente</asp:LinkButton>
+                                    <asp:LinkButton ID="lnkAddRoom" runat="server" class="dropdown-item">Aggiungi Camera</asp:LinkButton>
+                                </div>
+                            </div>
+                            <div runat="server" id="guest">
+                                <asp:LinkButton ID="lnkCamera" class="nav-link" href="/WebFormGuest.aspx" runat="server" CausesValidation="False">Camera</asp:LinkButton>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <asp:LinkButton ID="lnkLogout" runat="server" CausesValidation="False" OnClick="lnkLogout_Click" class="nav-link">Logout</asp:LinkButton></li>
+                        <li class="nav-item">
+                            <asp:LinkButton ID="lnkLogin" runat="server" class="nav-link" PostBackUrl="~/Login.aspx">Login</asp:LinkButton></li>
                     </ul>
                 </div>
             </div>
