@@ -3,6 +3,7 @@ using Facs.Modelli;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -25,10 +26,17 @@ namespace HotelBase
 
         protected void ddlFloors_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var x = ddlFloors.SelectedValue.Split(' ');
-            DataSet ds = facUsers.DSgetRooms(x[1]);
-            rpt.DataSource = ds;
-            rpt.DataBind();
+            if (ddlFloors.SelectedIndex != 0)
+            {
+                var x = ddlFloors.SelectedValue.Split(' ');
+                DataSet ds = facUsers.DSgetRooms(x[1]);
+                rpt.DataSource = ds;
+                rpt.DataBind();
+            }
+            else
+            {
+                Response.Redirect(Request.RawUrl);
+            }
         }
 
         protected void rpt_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -38,10 +46,26 @@ namespace HotelBase
                 var x = ddlFloors.SelectedValue.Split(' ');
                 List<UtenteGuest> list = facUsers.getRooms(x[1]);
                 Button btnOpen = (Button)e.Item.FindControl("btnOpen");
+                Label lblCamera = e.Item.FindControl("lblRoom") as Label;
+                var z = btnOpen.ClientID.Split('_');
+                if (list[int.Parse(z[3])].StatoPorta)
+                {
+                    btnOpen.BackColor = Color.Red;
+                }
+                else
+                {
+                    btnOpen.BackColor = Color.Green;
+                }
                 btnOpen.Click += new EventHandler(btnOpen_Click);
+                if (list[int.Parse(z[3])].Occupato)
+                {
+                    lblCamera.ForeColor = Color.Red;
+                }
+                else
+                {
+                    lblCamera.ForeColor = Color.Green;
+                }
 
-                //Button btnSetTemp = (Button)e.Item.FindControl("btnSetTemp");
-                //btnSetTemp.Click += new EventHandler(btnSetTemp_Click);
             }
         }
 
@@ -61,14 +85,14 @@ namespace HotelBase
         {
             RepeaterItem item = (sender as Button).NamingContainer as RepeaterItem;
             TextBox txt = item.FindControl("txtTemp") as TextBox;
+            Label lblSet = item.FindControl("lblSettato") as Label;
             var z = txt.ClientID.Split('_');
             var x = ddlFloors.SelectedValue.Split(' ');
             List<UtenteGuest> list = facUsers.getRooms(x[1]);
-            facUsers.SetTemperatura(list[int.Parse(z[3])].Stanza,decimal.Parse(txt.Text));
+            facUsers.SetTemperatura(list[int.Parse(z[3])].Stanza, decimal.Parse(txt.Text));
             DataSet ds = facUsers.DSgetRooms(x[1]);
             rpt.DataSource = ds;
             rpt.DataBind();
-
         }
     }
 }

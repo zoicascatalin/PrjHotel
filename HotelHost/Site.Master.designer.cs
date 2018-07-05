@@ -40,13 +40,67 @@ namespace HotelBase {
         protected global::System.Web.UI.WebControls.LinkButton Contact;
         
         /// <summary>
+        /// Controllo admin.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl admin;
+        
+        /// <summary>
         /// Controllo lnkAmministrazione.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkAmministrazione;
+        protected global::System.Web.UI.HtmlControls.HtmlButton lnkAmministrazione;
+        
+        /// <summary>
+        /// Controllo lnkCamere.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkCamere;
+        
+        /// <summary>
+        /// Controllo lnkAddGuest.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkAddGuest;
+        
+        /// <summary>
+        /// Controllo lnkAddRoom.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkAddRoom;
+        
+        /// <summary>
+        /// Controllo guest.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl guest;
+        
+        /// <summary>
+        /// Controllo lnkCamera.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkCamera;
         
         /// <summary>
         /// Controllo lnkLogout.

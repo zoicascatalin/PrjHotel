@@ -12,5 +12,6 @@ namespace Facs.Modelli
         public int Stanza { get; set; }
         public decimal Temperatura { get; set; }
         public bool StatoPorta { get; set; }
+        public bool Occupato { get; set; }
     }
 }

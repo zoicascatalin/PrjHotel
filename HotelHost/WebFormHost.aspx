@@ -6,6 +6,16 @@
             console.log(x)
         }
     </script>
+
+    <style type="text/css">
+        .roomDiv {
+            text-align: center;
+            font-family: Lucida Sans Unicode,sans-serif;
+            font-size: 17px;
+            font-weight: 600;
+        }
+    </style>
+
     <asp:Panel runat="server" ID="pnlBody">
 
         <div>
@@ -19,16 +29,16 @@
                 <br />
             </HeaderTemplate>
             <ItemTemplate>
-                <div class="row">
-                    <div>
-                        <asp:Label runat="server" ID="lblRoom" Text='<%# "Camera " + Eval("ID") %>'></asp:Label>
+                <div class="form-control">
+                    <div class="roomDiv">
+                        <asp:Label runat="server" ID="lblRoom" Text='<%# "Camera " + Eval("Camera") %>'></asp:Label>
                     </div>
-                    <div>
-                        <asp:Label runat="server" ID="lblTemp">Temperatura</asp:Label>
-                        <asp:TextBox runat="server" ID="txtTemp" Text='<%# Eval("Temperatura") %>'></asp:TextBox>
+                    <div style="margin: 10px;">
+                        <asp:Label runat="server" Style="float: left; line-height: 25px; padding: 5px;" ID="lblTemp">Temperatura</asp:Label>
+                        <asp:TextBox runat="server" Style="float: left; margin-right: 10px;" ID="txtTemp" CssClass="form-control" Text='<%# Eval("Temperatura") %>'></asp:TextBox>
                         <asp:Button runat="server" ID="btnSetTemp" CssClass="btn" OnClick="btnSetTemp_Click" Text="Setta" />
                     </div>
-                    <div>
+                    <div style="padding: 10px;">
                         <asp:Button runat="server" ID="btnOpen" CssClass="btn" OnClick="btnOpen_Click" Text='<%# (bool.Parse(Eval("Porta").ToString()) == true) ? "Chiudi porta" : "Apri Porta" %>' />
                     </div>
                 </div>

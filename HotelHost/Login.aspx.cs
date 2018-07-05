@@ -61,6 +61,10 @@ namespace HotelBase
                     {
                         Response.Redirect("WebFormGuest.aspx");
                     }
+                    else
+                    {
+                        lblWrongData.Text = "Utente Scaduto";
+                    }
                 }
                 else
                 {
