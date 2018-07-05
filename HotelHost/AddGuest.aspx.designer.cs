@@ -7,81 +7,81 @@
 // </generato automaticamente>
 //------------------------------------------------------------------------------
 
-namespace HotelBase {
+namespace HotelHost {
     
     
-    public partial class SiteMaster {
+    public partial class AddGuest {
         
         /// <summary>
-        /// Controllo Home.
+        /// Controllo divNome.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton Home;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divNome;
         
         /// <summary>
-        /// Controllo About.
+        /// Controllo setNome.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton About;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText setNome;
         
         /// <summary>
-        /// Controllo asd.
+        /// Controllo divCognome.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton asd;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divCognome;
         
         /// <summary>
-        /// Controllo Contact.
+        /// Controllo setCognome.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton Contact;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText setCognome;
         
         /// <summary>
-        /// Controllo lnkAmministrazione.
+        /// Controllo downCaemra.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkAmministrazione;
+        protected global::System.Web.UI.WebControls.DropDownList downCaemra;
         
         /// <summary>
-        /// Controllo lnkLogout.
+        /// Controllo setDataArrivo.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkLogout;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText setDataArrivo;
         
         /// <summary>
-        /// Controllo lnkLogin.
+        /// Controllo setDataPartenza.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkLogin;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText setDataPartenza;
         
         /// <summary>
-        /// Controllo MainContent.
+        /// Controllo btnSalva.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
+        protected global::System.Web.UI.WebControls.Button btnSalva;
     }
 }

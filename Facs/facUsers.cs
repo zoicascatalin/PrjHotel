@@ -102,7 +102,7 @@ namespace Facs
                     res.Stanza = int.Parse(result[0].ToString());
                 }
 
-                SqlCommand cmd2 = new SqlCommand("SELECT ID_Piano,Temeperatura,Porta from Rooms Where ID = @RoomId", conn);
+                SqlCommand cmd2 = new SqlCommand("SELECT ID_Piano,Temperatura,Porta from Rooms Where ID = @RoomId", conn);
                 cmd2.Parameters.AddWithValue("@RoomId", res.Stanza);
                 result.Close();
                 SqlDataReader result2 = cmd2.ExecuteReader();
@@ -165,7 +165,7 @@ namespace Facs
 
             try
             {
-                SqlCommand cmd = new SqlCommand("UPDATE Rooms SET Temeperatura = @temp WHERE ID = @roomID", conn);
+                SqlCommand cmd = new SqlCommand("UPDATE Rooms SET Temperatura = @temp WHERE ID = @roomID", conn);
                 cmd.Parameters.AddWithValue("@temp", utente.Temperatura);
                 cmd.Parameters.AddWithValue("@roomID", utente.Stanza);
 
@@ -408,7 +408,7 @@ namespace Facs
                 cmd.ExecuteNonQuery();
 
             }
-            catch (Exception ex)
+            catch (Exception ex) 
             {
                 Console.WriteLine(ex);
             }
@@ -417,5 +417,73 @@ namespace Facs
                 conn.Close();
             }
         }
+
+        public static DataSet GetRoom()
+        {
+
+            DataSet list = new DataSet();
+
+            SqlConnection conn = new SqlConnection(cnnStr);
+            try
+            {
+                conn.Open();
+                SqlDataAdapter cmd = new SqlDataAdapter("SELECT Camera FROM Rooms WHERE Occupata = '0'",conn);
+
+                
+                cmd.Fill(list);
+                
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return list;
+            
+        }
+
+        public static void AddGuest(int camera, string nome, string cognome, string username, string pwd, DateTime arrivo, DateTime partenza)
+        {
+            SqlConnection conn = new SqlConnection(cnnStr);
+
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("INSERT INTO Users (ID, username, password, Nome, Cognome, CheckedOut, NR_Camera, Arrivo, Partenza)"+
+                                                " Values (@id, @uname, @pwd, @nome, @cognome, '0', @camera, @arrivo, @partenza)", conn);
+                cmd.Parameters.AddWithValue("@nome", nome);
+                cmd.Parameters.AddWithValue("@cognome", cognome);
+                cmd.Parameters.AddWithValue("@camera", camera);
+                cmd.Parameters.AddWithValue("@uname", username);
+                cmd.Parameters.AddWithValue("@pwd", pwd);
+                cmd.Parameters.AddWithValue("@id", Guid.NewGuid());
+                cmd.Parameters.AddWithValue("@arrivo", arrivo);
+                cmd.Parameters.AddWithValue("@partenza", partenza);
+                
+                
+
+                cmd.ExecuteNonQuery();
+
+
+                SqlCommand cmd2 = new SqlCommand("UPDATE Rooms SET Occupata = '1' WHERE Camera = @camera",conn);
+                cmd2.Parameters.AddWithValue("@camera", camera);
+
+                cmd2.ExecuteNonQuery();
+            }
+            catch 
+            {
+
+                return;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+        }
+
     }
 }
