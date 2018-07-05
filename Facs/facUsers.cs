@@ -36,7 +36,7 @@ namespace Facs
                     usr.CheckedOut = bool.Parse(result[5].ToString());
                     usr.Role = int.Parse(result[6].ToString());
                     if (usr.Username != "admin")
-                        usr.ID_Camera = int.Parse(result[8].ToString());
+                        usr.NR_Camera = int.Parse(result[8].ToString());
                 }
 
             }
@@ -70,7 +70,7 @@ namespace Facs
                     usr.CheckedOut = bool.Parse(result[5].ToString());
                     usr.Role = int.Parse(result[6].ToString());
                     if (usr.Username != "admin")
-                        usr.ID_Camera = int.Parse(result[8].ToString());
+                        usr.NR_Camera = int.Parse(result[8].ToString());
                 }
 
             }
@@ -93,7 +93,7 @@ namespace Facs
             try
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("SELECT ID_Camera From Users WHERE ID = @id"
+                SqlCommand cmd = new SqlCommand("SELECT NR_Camera From Users WHERE ID = @id"
                                                 , conn);
                 cmd.Parameters.AddWithValue("@id", userId);
                 SqlDataReader result = cmd.ExecuteReader();
@@ -102,7 +102,7 @@ namespace Facs
                     res.Stanza = int.Parse(result[0].ToString());
                 }
 
-                SqlCommand cmd2 = new SqlCommand("SELECT ID_Piano,Temperatura,Porta from Rooms Where ID = @RoomId", conn);
+                SqlCommand cmd2 = new SqlCommand("SELECT ID_Piano,Temperatura,Porta from Rooms Where Camera = @RoomId", conn);
                 cmd2.Parameters.AddWithValue("@RoomId", res.Stanza);
                 result.Close();
                 SqlDataReader result2 = cmd2.ExecuteReader();
@@ -141,7 +141,7 @@ namespace Facs
 
             try
             {
-                SqlCommand cmd = new SqlCommand("UPDATE Rooms SET Porta = @stato WHERE ID = @roomID", conn);
+                SqlCommand cmd = new SqlCommand("UPDATE Rooms SET Porta = @stato WHERE Camera = @roomID", conn);
                 cmd.Parameters.AddWithValue("@stato", utente.StatoPorta);
                 cmd.Parameters.AddWithValue("@roomID", utente.Stanza);
 
@@ -165,7 +165,7 @@ namespace Facs
 
             try
             {
-                SqlCommand cmd = new SqlCommand("UPDATE Rooms SET Temperatura = @temp WHERE ID = @roomID", conn);
+                SqlCommand cmd = new SqlCommand("UPDATE Rooms SET Temperatura = @temp WHERE Camera = @roomID", conn);
                 cmd.Parameters.AddWithValue("@temp", utente.Temperatura);
                 cmd.Parameters.AddWithValue("@roomID", utente.Stanza);
 
@@ -181,13 +181,13 @@ namespace Facs
                 return;
             }
         }
-        public static void SetTemperatura(int stanza,decimal temp)
+        public static void SetTemperatura(int stanza, decimal temp)
         {
             SqlConnection conn = new SqlConnection(cnnStr);
 
             try
             {
-                SqlCommand cmd = new SqlCommand("UPDATE Rooms SET Temperatura = @temp WHERE ID = @roomID", conn);
+                SqlCommand cmd = new SqlCommand("UPDATE Rooms SET Temperatura = @temp WHERE Camera = @roomID", conn);
                 cmd.Parameters.AddWithValue("@temp", temp);
                 cmd.Parameters.AddWithValue("@roomID", stanza);
 
@@ -270,9 +270,9 @@ namespace Facs
                 SqlCommand cmd = new SqlCommand("UPDATE AccessLog SET Logged = 0 WHERE ID_User = @id", conn);
                 cmd.Parameters.AddWithValue("@id", userID);
                 cmd.ExecuteNonQuery();
-                SqlCommand cmd2 = new SqlCommand("UPDATE Users SET CheckedOut = 1 WHERE ID = @id", conn);
-                cmd2.Parameters.AddWithValue("@id", userID);
-                cmd2.ExecuteNonQuery();
+                //SqlCommand cmd2 = new SqlCommand("UPDATE Users SET CheckedOut = 1 WHERE ID = @id", conn);
+                //cmd2.Parameters.AddWithValue("@id", userID);
+                //cmd2.ExecuteNonQuery();
 
             }
             catch (Exception e)
@@ -342,7 +342,7 @@ namespace Facs
             try
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand(@"SELECT Rooms.Temperatura,Rooms.Porta,Rooms.ID FROM Floors
+                SqlCommand cmd = new SqlCommand(@"SELECT Rooms.Temperatura,Rooms.Porta,Rooms.Camera,Rooms.Occupata FROM Floors
                                                     JOIN Rooms ON Rooms.ID_Piano = Floors.ID AND Piano = @floor", conn);
                 cmd.Parameters.AddWithValue("@floor", x);
                 var result = cmd.ExecuteReader();
@@ -353,7 +353,8 @@ namespace Facs
                         Piano = int.Parse(x),
                         Stanza = int.Parse(result[2].ToString()),
                         Temperatura = decimal.Parse(result[0].ToString()),
-                        StatoPorta = bool.Parse(result[1].ToString())
+                        StatoPorta = bool.Parse(result[1].ToString()),
+                        Occupato = bool.Parse(result[3].ToString())
                     });
                 }
             }
@@ -377,7 +378,7 @@ namespace Facs
             try
             {
                 conn.Open();
-                string query = string.Format(@"SELECT Rooms.Temperatura,Rooms.Porta,Rooms.ID FROM Floors
+                string query = string.Format(@"SELECT Rooms.Temperatura,Rooms.Porta,Rooms.Camera FROM Floors
                                                     JOIN Rooms ON Rooms.ID_Piano = Floors.ID AND Piano = {0}", x);
                 SqlDataAdapter da = new SqlDataAdapter(query, conn);
                 da.Fill(ds);
@@ -400,7 +401,7 @@ namespace Facs
             try
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("UPDATE Rooms SET Porta = @stato WHERE ID = @roomID", conn);
+                SqlCommand cmd = new SqlCommand("UPDATE Rooms SET Porta = @stato WHERE Camera = @roomID", conn);
                 cmd.Parameters.AddWithValue("@stato", porta);
                 cmd.Parameters.AddWithValue("@roomID", stanza);
 
@@ -408,7 +409,7 @@ namespace Facs
                 cmd.ExecuteNonQuery();
 
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
@@ -417,6 +418,7 @@ namespace Facs
                 conn.Close();
             }
         }
+
 
         public static DataSet GetRoom()
         {
@@ -427,11 +429,11 @@ namespace Facs
             try
             {
                 conn.Open();
-                SqlDataAdapter cmd = new SqlDataAdapter("SELECT Camera FROM Rooms WHERE Occupata = '0'",conn);
+                SqlDataAdapter cmd = new SqlDataAdapter("SELECT Camera FROM Rooms WHERE Occupata = '0'", conn);
 
-                
+
                 cmd.Fill(list);
-                
+
             }
             catch
             {
@@ -442,7 +444,7 @@ namespace Facs
                 conn.Close();
             }
             return list;
-            
+
         }
 
         public static void AddGuest(int camera, string nome, string cognome, string username, string pwd, DateTime arrivo, DateTime partenza)
@@ -452,7 +454,7 @@ namespace Facs
             try
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("INSERT INTO Users (ID, username, password, Nome, Cognome, CheckedOut, NR_Camera, Arrivo, Partenza)"+
+                SqlCommand cmd = new SqlCommand("INSERT INTO Users (ID, username, password, Nome, Cognome, CheckedOut, NR_Camera, Arrivo, Partenza)" +
                                                 " Values (@id, @uname, @pwd, @nome, @cognome, '0', @camera, @arrivo, @partenza)", conn);
                 cmd.Parameters.AddWithValue("@nome", nome);
                 cmd.Parameters.AddWithValue("@cognome", cognome);
@@ -462,18 +464,18 @@ namespace Facs
                 cmd.Parameters.AddWithValue("@id", Guid.NewGuid());
                 cmd.Parameters.AddWithValue("@arrivo", arrivo);
                 cmd.Parameters.AddWithValue("@partenza", partenza);
-                
-                
+
+
 
                 cmd.ExecuteNonQuery();
 
 
-                SqlCommand cmd2 = new SqlCommand("UPDATE Rooms SET Occupata = '1' WHERE Camera = @camera",conn);
+                SqlCommand cmd2 = new SqlCommand("UPDATE Rooms SET Occupata = '1' WHERE Camera = @camera", conn);
                 cmd2.Parameters.AddWithValue("@camera", camera);
 
                 cmd2.ExecuteNonQuery();
             }
-            catch 
+            catch
             {
 
                 return;
