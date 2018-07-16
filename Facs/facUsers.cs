@@ -487,5 +487,28 @@ namespace Facs
 
         }
 
+       
+        public static void setTemperatureCamera(int camera,int temperature)
+        {
+            SqlConnection conn = new SqlConnection(cnnStr);
+
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("UPDATE Rooms SET Temperatura = @temp WHERE Camera = @camera",conn);
+                cmd.Parameters.AddWithValue("@temp", temperature);
+                cmd.Parameters.AddWithValue("@camera", camera);
+                cmd.ExecuteNonQuery();
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
     }
 }
