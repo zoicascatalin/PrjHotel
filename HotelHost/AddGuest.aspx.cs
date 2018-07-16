@@ -20,6 +20,8 @@ namespace HotelHost
                 downCaemra.DataValueField = "Camera";
                 downCaemra.DataTextField = "Camera";
                 downCaemra.DataBind();
+
+                
             }
         }
 
